@@ -20,9 +20,6 @@ $this->load->view('dist/_partials/header');
 
                             <h4>Data Penerimaan</h4>
                             <div>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createpeng">
-                                    Tambah
-                                </button>
                             </div>
                         </div>
                         <div class="card-body">

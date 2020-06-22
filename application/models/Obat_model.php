@@ -18,10 +18,10 @@ class Obat_model extends CI_Model
     // datatables
     function json()
     {
-        $this->datatables->select('o.id,o.kode,o.kode_siva,o.nama_obat,o.generik,o.satuan,o.harga,o.insert_at, s.satuan as satuan ');
+        $this->datatables->select('o.id,o.kode,o.kode_siva,o.nama_obat,o.generik,o.satuan,o.harga,o.insert_at');
         $this->datatables->from('tb_obat as o');
         //add this line for join
-        $this->datatables->join('tb_satuan as s', 'o.satuan = s.id');
+        // $this->datatables->join('tb_satuan as s', 'o.satuan = s.id');
         $this->datatables->add_column('action', anchor(site_url('Obat/update/$1'), '<div class="badge badge-warning">Update</div>') . anchor(site_url('Obat/delete/$1'), '<div class="badge badge-danger">Delete</div>', 'onclick="javasciprt: return confirm(\'Are You Sure ?\')"'), 'id');
         return $this->datatables->generate();
     }
@@ -96,6 +96,12 @@ class Obat_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         $this->db->delete($this->table);
+    }
+
+    public function insertimport($data)
+    {
+        $this->db->insert('tb_obat', $data);
+        return $this->db->insert_id();
     }
 }
 

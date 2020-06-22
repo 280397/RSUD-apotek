@@ -20,9 +20,10 @@ $this->load->view('dist/_partials/header');
                     <div class="card">
                         <div class="card-header">
                             <h4>Obat Data</h4>
-                            <!-- <div>
-                                <?php echo anchor(site_url('Obat/create'), 'Create', 'class="btn btn-primary"'); ?>
-                            </div> -->
+
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ImportObat">
+                                Import Excel
+                            </button>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createObat">
                                 Tambah
                             </button>
@@ -94,7 +95,7 @@ $this->load->view('dist/_partials/header');
                         <select name="satuan" id="satuan" class="form-control" required="required" autofocus="autofocus">
                             <option value="">--Pilih Satuan--</option>
                             <?php foreach ($satuan as $key => $data) { ?>
-                                <option value="<?= $data->id ?>"><?= $data->satuan ?></option>
+                                <option value="<?= $data->satuan ?>"><?= $data->satuan ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -106,6 +107,31 @@ $this->load->view('dist/_partials/header');
                     <input type="hidden" name="id" />
                     <button type="submit" class="btn btn-primary">Save</button>
                     <a href="<?php echo site_url('Obat') ?>" class="btn btn-default">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- import -->
+<div class="modal fade" id="ImportObat" tabindex="-1" role="dialog" aria-labelledby="createTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Import Obat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="<?= site_url('Obat/importExcel') ?>" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input type="file" name="file" class="form-control" id="file" required /></p>
+                        </div>
+                    </div>
+                    <button type="submit" name="file" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>

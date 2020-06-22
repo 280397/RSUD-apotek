@@ -123,7 +123,7 @@ $this->load->view('dist/_partials/header');
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<?= site_url('Obat_transaksi/insertCart') ?>" method="post">
+            <form action="<?= site_url('Obat_transaksi/insert') ?>" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="nama_barang">Nama Barang *</label>
@@ -143,8 +143,9 @@ $this->load->view('dist/_partials/header');
                         <input type="number" class="form-control" name="jumlah" id="jumlah" required autofocus />
                     </div>
                     <div class="form-group">
-                        <label for="harga">Harga *</label>
-                        <input type="number" class="form-control" name="harga" id="harga" required autofocus />
+                        <label for="harga">Harga *</label><small> (Biarkan kosong jika harga tidak berubah)</small>
+                        <input type="number" class="form-control" name="harga" id="harga" />
+
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" name="id" />

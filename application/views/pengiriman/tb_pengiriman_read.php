@@ -53,6 +53,7 @@ $this->load->view('dist/_partials/header');
                                         <input type="hidden" name="date" value="<?= $date ?>" />
                                         <tr>
                                             <th width="80px">No</th>
+                                            <th>Tanggal Diterima</th>
                                             <th>Nama Barang</th>
                                             <th>Jumlah</th>
                                             <th>Status</th>
@@ -64,6 +65,7 @@ $this->load->view('dist/_partials/header');
                                         foreach ($pengiriman as $key) { ?>
                                             <tr>
                                                 <td><?= $no++ ?></td>
+                                                <td><?= $key->tgl_diterima ?></td>
                                                 <td><?= $key->nama ?></td>
                                                 <td><?= $key->jumlah ?></td>
                                                 <td>

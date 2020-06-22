@@ -9,7 +9,7 @@ class Satuan extends CI_Controller
     {
         parent::__construct();
         check_not_login();
-        check_admin();
+        check_admin_1();
         $this->load->model('Satuan_model');
         $this->load->library('form_validation');
         $this->load->library('datatables');

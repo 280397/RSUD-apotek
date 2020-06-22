@@ -17,6 +17,7 @@ class Obat_transaksi extends CI_Controller
         $this->load->library('datatables');
         $this->load->library('fungsi');
         $this->load->library('cart');
+        $this->load->library('javascript');
     }
 
     public function index()
@@ -102,37 +103,89 @@ class Obat_transaksi extends CI_Controller
     }
 
 
-    function insertCart()
+    public function insert()
     {
-
         $id_dist = $this->input->post('id_distributor', TRUE);
+        $jumlah = $this->input->post('jumlah', TRUE);
+        $exp = $this->input->post('exp', TRUE);
         $query = $this->db->query("SELECT * FROM tb_distributor WHERE id = '$id_dist'")->row();
-
-        $data = array(
-            'obat' => $this->Obat_model->get_all(),
-            'distributor' => $query,
-            'id_distributor' => $this->input->post('id_distributor', TRUE),
-            'no_faktur' => $this->input->post('no_faktur', TRUE),
-            'tanggal' => $this->input->post('tanggal', TRUE),
-        );
 
         $nama_barang['id'] = $this->input->post('nama_barang', TRUE);
         $id = $nama_barang['id'];
         $nama_obat = $this->db->query("SELECT nama_obat FROM tb_obat WHERE id = $id")->row();
         $kode_obat = $this->db->query("SELECT kode FROM tb_obat WHERE id = $id")->row();
+        $harga = $this->input->post('harga', TRUE);
+        $cek_harga = $this->Obat_transaksi_model->check_harga($kode_obat->kode)->row();
+
+        $data = array(
+            'obat'              => $this->Obat_model->get_all(),
+            'distributor'       => $query,
+            'id_distributor'    => $this->input->post('id_distributor', TRUE),
+            'no_faktur'         => $this->input->post('no_faktur', TRUE),
+            'tanggal'           => $this->input->post('tanggal', TRUE),
+            'id'                => $id,
+            'kode_obat'         => $kode_obat->kode,
+            'cek_harga'         => $cek_harga->harga,
+            'harga'             => $harga,
+            'nama_obat'         => $nama_obat->nama_obat,
+            'jumlah'            => $jumlah,
+            'exp'               => $exp
+        );
+        if ($cek_harga->harga < $harga) {
+            echo "<script>
+                     
+                    alert('Apakah ingin merubah harga ?')
+                        window.action='" .  $this->insertCartUpdate($data) . "';                       
+                      
+             </script>";
+        } else if ($cek_harga > $harga) {
+            $this->insertCart($data);
+        }
+    }
+
+    function insertCart($data)
+    {
+        $value_cart = $this->cart->contents();
+        $status = $this->checkCart($value_cart, $data['kode_obat']);
 
         $cart = array(
             'rowid' => null,
-            'id'      =>  $id,
-            'qty'     => $this->input->post('jumlah', TRUE),
-            'price'   => $this->input->post('harga', TRUE),
-            'name'    =>  $nama_obat->nama_obat,
-            'exp'   => $this->input->post('exp', TRUE),
-            'kode_obat'   => $kode_obat->kode
+            'id'      =>  $data['id'],
+            'qty'     => $data['jumlah'],
+            'price'   => $data['cek_harga'],
+            'name'    =>  $data['nama_obat'],
+            'exp'   => $data['exp'],
+            'kode_obat'   => $data['kode_obat']
         );
-        $value_cart = $this->cart->contents();
-        $status = $this->checkCart($value_cart, $kode_obat);
+        // var_dump($value_cart);
+        // die;
+        if ($status != null) {
+            $cart['rowid'] = $status;
 
+            $this->cart->update($cart);
+        } else {
+            $this->cart->insert($cart);
+        }
+
+        $this->load->view('obat_transaksi/tb_obat_transaksi', $data);
+    }
+    function insertCartUpdate($data)
+    {
+        // echo 'berhasil';
+        $value_cart = $this->cart->contents();
+        $status = $this->checkCart($value_cart, $data['kode_obat']);
+
+        $cart = array(
+            'rowid' => null,
+            'id'      =>  $data['id'],
+            'qty'     => $data['jumlah'],
+            'price'   => $data['harga'],
+            'name'    =>  $data['nama_obat'],
+            'exp'   => $data['exp'],
+            'kode_obat'   => $data['kode_obat']
+        );
+        // var_dump($value_cart);
+        // die;
         if ($status != null) {
             $cart['rowid'] = $status;
 
@@ -144,10 +197,10 @@ class Obat_transaksi extends CI_Controller
         $this->load->view('obat_transaksi/tb_obat_transaksi', $data);
     }
 
-    public function checkCart($data, $kode_obat)
+    public function checkCart($data, $kode)
     {
         foreach ($data as $key) {
-            if ($key['kode_obat'] == $kode_obat->kode) {
+            if ($key['kode_obat'] == $kode) {
                 return $key['rowid'];
             }
         }
@@ -207,6 +260,7 @@ class Obat_transaksi extends CI_Controller
             $value = array(
                 'kode_barang' => $stok['kode_obat'],
                 'stok' => $stok['qty'],
+                'harga' => $stok['price'],
                 'id_ruang' => $user,
             );
             $this->Obat_transaksi_model->insert_stok($value);

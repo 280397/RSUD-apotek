@@ -29,6 +29,8 @@ $this->load->view('dist/_partials/header');
                                         <tr>
                                             <th width="80px">No</th>
                                             <th>Kode Barang</th>
+                                            <th>Nama Barang</th>
+                                            <th>Harga</th>
                                             <th>Stok</th>
                                             <th>Ruang</th>
                                         </tr>

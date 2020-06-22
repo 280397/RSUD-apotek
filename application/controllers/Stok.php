@@ -16,7 +16,11 @@ class Stok extends CI_Controller
 
     public function index()
     {
-        $this->load->view('stok/stok_data');
+        $data = array(
+            'title' => "Stok Obat"
+
+        );
+        $this->load->view('stok/stok_data', $data);
     }
 
     public function json()

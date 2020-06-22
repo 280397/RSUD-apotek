@@ -9,7 +9,7 @@ class Ruang extends CI_Controller
   {
     parent::__construct();
     check_not_login();
-    check_admin();
+    check_admin_1();
     $this->load->model('Ruang_model');
     $this->load->library('form_validation');
     $this->load->library('datatables');

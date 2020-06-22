@@ -23,9 +23,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
   <?php
   } elseif ($this->uri->segment(1) == "User" || $this->uri->segment(1) == "Satuan" || $this->uri->segment(1) == "Obat" || $this->uri->segment(1) == "Ruang" || $this->uri->segment(1) == "Distributor" || $this->uri->segment(1) == "Obat_transaksi" || $this->uri->segment(1) == "Pengiriman" || $this->uri->segment(1) == "Penerimaan" || $this->uri->segment(1) == "Stok") { ?>
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/fontawesome/css/all.min.css">
+
+    <!-- CSS Libraries -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/datatables/datatables.min.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
+
     <style>
       .dataTables_wrapper {
         min-height: 500px

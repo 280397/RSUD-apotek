@@ -18,10 +18,11 @@ class Stok_model extends CI_Model
     // datatables
     function json($session = null)
     {
-        $this->datatables->select('s.id,s.kode_barang,s.stok,r.nama_ruang as ruang');
+        $this->datatables->select('s.id,s.kode_barang,s.stok,s.harga,r.nama_ruang as ruang,o.nama_obat as nama');
         $this->datatables->from('tb_stok as s');
         //add this line for join
         $this->datatables->join('tb_ruang as r', 's.id_ruang = r.id');
+        $this->datatables->join('tb_obat as o', 's.kode_barang = o.kode');
         if ($session != null) {
             $this->datatables->where('s.id_ruang', $session);
         }

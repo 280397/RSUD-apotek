@@ -34,8 +34,10 @@ class Pengiriman_model extends CI_Model
         $this->datatables->add_column(
             'action',
             anchor(site_url('Pengiriman/detail/$1'), '<div class="badge badge-warning">Detail</div>')
-            // . anchor(site_url('pengiriman/delete/$1'), '<div class="badge badge-danger">Delete</div>', 'onclick="javasciprt: return confirm(\'Are You Sure ?\')"')
-            ,
+                .
+                anchor(site_url('pengiriman/delete/$1'), '<div class="badge badge-danger">Delete</div>', 'onclick="javascript: return confirm(\'Yakin hapus data?\')"')
+                .
+                anchor(site_url('pengiriman/print/$1'), '<div class="badge badge-success">Print</div>', 'target="_blank"'),
             'id'
         );
         return $this->datatables->generate();
@@ -86,6 +88,7 @@ class Pengiriman_model extends CI_Model
         $this->db->from('tb_stok as s');
         $this->db->join('tb_obat as o', 'o.kode = s.kode_barang');
         $this->db->where('s.id_ruang', $user);
+        $this->db->where('s.stok !=', 0);
         $query = $this->db->get();
         // var_dump($query);
         // die;
@@ -162,6 +165,11 @@ class Pengiriman_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         $this->db->delete($this->table);
+    }
+    function delete_detail($id)
+    {
+        $this->db->where('id_pengiriman', $id);
+        $this->db->delete($this->table_detail);
     }
 }
 

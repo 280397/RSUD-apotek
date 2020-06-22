@@ -107,21 +107,31 @@ class Obat_transaksi_model extends CI_Model
     }
     function insert_stok($data)
     {
-        // var_dump($data);
-        // die;
         $kode_barang = $data['kode_barang'];
+        $id_ruang = $data['id_ruang'];
         $kodeb = $this->db->query("SELECT * FROM tb_stok WHERE kode_barang = " . "'$kode_barang'")->row()->kode_barang;
 
-        if ($kodeb == null) {
-            $this->db->insert($this->table_stok, $data);
-        } else {
-            $stok_awal = $this->db->query("SELECT stok FROM tb_stok WHERE kode_barang = " . "'$kode_barang'")->row()->stok;
-            $stok_input = $data['stok'];
-            $jumlah = $stok_awal + $stok_input;
+        $stok_awal = $this->db->query("SELECT stok FROM tb_stok WHERE kode_barang = " . "'$kode_barang'" . " AND id_ruang =" . " '$id_ruang'")->row()->stok;
+        $stok_input = $data['stok'];
+        $harga_awal = $this->db->query("SELECT harga FROM tb_stok WHERE kode_barang = " . "'$kode_barang'" . " AND id_ruang =" . " '$id_ruang'")->row()->harga;
+        $harga_input = $data['harga'];
+        // var_dump($harga_input);
+        // die;
+        if ($kodeb != null) {
+            if ($harga_awal == $harga_input) {
+                $jumlah = $stok_awal + $stok_input;
 
-            $this->db->set('stok', $jumlah);
-            $this->db->where('kode_barang', $kode_barang);
-            $this->db->update($this->table_stok);
+                $this->db->set('stok', $jumlah);
+                $this->db->where('kode_barang', $kode_barang);
+                $this->db->where('id_ruang', $id_ruang);
+                $this->db->where('harga', $harga_input);
+                $this->db->update($this->table_stok);
+            } else {
+                $this->db->insert($this->table_stok, $data);
+                # code...
+            }
+        } else {
+            $this->db->insert($this->table_stok, $data);
         }
     }
 
@@ -148,6 +158,15 @@ class Obat_transaksi_model extends CI_Model
     {
         $this->db->from('tb_stok');
         $this->db->where('kode_barang', $kode);
+
+        $query = $this->db->get();
+        return $query;
+    }
+    function check_harga($code)
+    {
+        $this->db->select('harga');
+        $this->db->from('tb_obat');
+        $this->db->where('kode', $code);
 
         $query = $this->db->get();
         return $query;

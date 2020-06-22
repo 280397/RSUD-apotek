@@ -20,9 +20,7 @@ function check_admin()
 {
     $ci = &get_instance();
     $ci->load->library('fungsi');
-    if ($ci->fungsi->user_login()->level == 2) {
-        redirect('Stok');
-    } elseif ($ci->fungsi->user_login()->level == 3) {
+    if ($ci->fungsi->user_login()->level == 3) {
         redirect('Stok');
     }
 }

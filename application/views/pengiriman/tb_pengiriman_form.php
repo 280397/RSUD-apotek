@@ -42,10 +42,7 @@ $this->load->view('dist/_partials/header');
 
                             </div>
                             <?= $this->session->flashdata('message'); ?>
-                            <div class="table-responsive">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createpeng">
-                                    Tambah
-                                </button>
+                            <div class="table-responsive"><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Tambah</button>
 
                                 <div class="float-right">
 
@@ -66,7 +63,7 @@ $this->load->view('dist/_partials/header');
                                     </form>
                                 </div>
 
-                                <table class=" table table-striped mt-4" id="table-1">
+                                <table class=" table table-striped mt-4" id="table">
                                     <thead>
                                         <input type="hidden" name="id" />
                                         <input type="hidden" name="no_spb" value="<?= $no_spb  ?>" />
@@ -76,6 +73,7 @@ $this->load->view('dist/_partials/header');
                                         <tr>
                                             <th width="80px">No</th>
                                             <th>Nama Barang</th>
+                                            <th>Harga</th>
                                             <th>Jumlah</th>
                                             <th width="200px" class="text-center">Action</th>
                                         </tr>
@@ -86,7 +84,7 @@ $this->load->view('dist/_partials/header');
                                             <tr>
                                                 <td><?= $no++ ?></td>
                                                 <td><?= $key['name'] ?></td>
-
+                                                <td><?= $key['price'] ?></td>
                                                 <td><?= $key['qty'] ?></td>
                                                 <td class="text-center">
 
@@ -116,44 +114,65 @@ $this->load->view('dist/_partials/header');
     </section>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="createpeng" tabindex="-1" role="dialog" aria-labelledby="createTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="<?= site_url('Pengiriman/insertCart') ?>" method="post">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="nama_barang">Nama Barang *</label>
-                        <select name="nama_barang" id="nama_barang" class="form-control" required="required" autofocus="autofocus">
-                            <option value="">--Pilih Nama Barang--</option>
-                            <?php foreach ($obat as $key => $data) { ?>
-                                <option value="<?= $data->id ?>"><?= $data->nama . "&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Stok :" . $data->stok  ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="">
+                                <table class=" table table-striped mt-4" id="table-1">
+                                    <thead>
+                                        <input type="hidden" name="id" />
+                                        <input type="hidden" name="no_spb" value="<?= $no_spb  ?>" />
+                                        <input type="hidden" name="id_ruang" value="<?= $ruang->id_ruang ?>" />
+                                        <input type="hidden" name="id_ruang_tujuan" value="<?= $ruang_tujuan->id  ?>" />
+                                        <input type="hidden" name="date" value="<?= $date ?>" />
+                                        <tr>
+                                            <th>id</th>
+                                            <th>Kode</th>
+                                            <th>Nama</th>
+                                            <th>Harga</th>
+                                            <th>Stok</th>
+                                            <th>Dikirim</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        foreach ($obat as $key => $data) { ?>
+                                            <tr>
+                                                <td><?= $data->id ?></td>
+                                                <td><?= $data->kode_barang ?></td>
+                                                <td><?= $data->nama ?></td>
+                                                <td><?= $data->harga ?></td>
+                                                <td><?= $data->stok ?></td>
+                                                <td>
+                                                    <form action="<?= site_url('Pengiriman/insertCart') ?>" method="post">
+                                                        <input style="width: 80px;" type="number" class="form-control" name="jumlah" id="jumlah" required autofocus />
 
-                    <div class="form-group">
-                        <label for="jumlah">Jumlah *</label>
-                        <input type="number" class="form-control" name="jumlah" id="jumlah" required autofocus />
-                    </div>
-
-                    <div class="modal-footer">
-                        <input type="hidden" name="id" />
-                        <input type="hidden" name="no_spb" value="<?= $no_spb  ?>" />
-                        <input type="hidden" name="id_ruang" value="<?= $ruang->id_ruang ?>" />
-                        <input type="hidden" name="id_ruang_tujuan" value="<?= $ruang_tujuan->id  ?>" />
-                        <input type="hidden" name="date" value="<?= $date ?>" />
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" name="id" value="<?= $data->id ?>" />
+                                                    <input type="hidden" name="no_spb" value="<?= $no_spb  ?>" />
+                                                    <input type="hidden" name="id_ruang" value="<?= $ruang->id_ruang ?>" />
+                                                    <input type="hidden" name="id_ruang_tujuan" value="<?= $ruang_tujuan->id  ?>" />
+                                                    <input type="hidden" name="date" value="<?= $date ?>" />
+                                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-            </form>
+            </div>
         </div>
     </div>
 </div>

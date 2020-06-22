@@ -25,11 +25,6 @@ $this->load->view('dist/_partials/header');
                             <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
                                 <div class="card-body">
 
-                                    <!-- <div class="form-group">
-                                        <label for="satuan">satuan *</label>
-                                        <input type="text" class="form-control" name="_satuan" value="<?= $satuan ?>" id="_satuan" required autofocus>
-                                        <?= form_error('satuan', '<small class="text-danger">', '</small>'); ?>
-                                    </div> -->
                                     <div class="form-group">
                                         <label for="kode">Kode *</label>
                                         <input type="text" class="form-control" name="kode" id="kode" value="<?= $kode ?>" placeholder="" required autofocus />
@@ -57,8 +52,7 @@ $this->load->view('dist/_partials/header');
                                         <select name="satuan" id="satuan" class="form-control" required="required" autofocus="autofocus">
                                             <option value="">--Pilih Satuan--</option>
                                             <?php foreach ($o_satuan as $key => $data) { ?>
-                                                <!-- <option value="<?= $data->id ?>"><?= $data->satuan ?></option> -->
-                                                <option value="<?= $data->id  ?>" <?= $data->id  == $satuan ? "selected" : null ?>><?= $data->satuan ?></option>
+                                                <option value="<?= $data->satuan  ?>" <?= $data->satuan  == $satuan ? "selected" : null ?>><?= $data->satuan ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>

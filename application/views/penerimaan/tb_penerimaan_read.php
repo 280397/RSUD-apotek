@@ -79,6 +79,7 @@ $this->load->view('dist/_partials/header');
                                                             <input type="hidden" name="id_pengiriman" value="<?= $key->id_pengiriman ?>" />
                                                             <input type="hidden" name="kode_barang" value="<?= $key->kode_barang ?>" />
                                                             <input type="hidden" name="stok" value="<?= $key->jumlah ?>" />
+                                                            <input type="hidden" name="harga" value="<?= $key->harga ?>" />
                                                             <button onclick="return confirm('Apakah anda yakin?')" class="btn btn-primary btn-xs">
                                                                 <i class="fas fa-share"> Terima</i>
                                                             </button>

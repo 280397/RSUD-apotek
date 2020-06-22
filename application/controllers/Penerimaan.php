@@ -76,10 +76,29 @@ class Penerimaan extends CI_Controller
         $id_pengiriman = $this->input->post('id_pengiriman', TRUE);
         $kode_barang = $this->input->post('kode_barang', TRUE);
         $stok = $this->input->post('stok', TRUE);
+        $harga = $this->input->post('harga', TRUE);
         $ruang = $this->Pengiriman_model->get($id_pengiriman)->row();
 
+        $to_model_asal = array(
+            'ruang' => $ruang->id_ruang,
+            'harga' => $harga,
+            'kode_barang' => $kode_barang
+        );
+        $to_model_tujuan = array(
+            'ruang' => $ruang->id_ruang_tujuan,
+            'harga' => $harga,
+            'kode_barang' => $kode_barang
+        );
+
+        $cek = $this->Penerimaan_model->cek_insert_stok($to_model_tujuan)->row();
+        // $cek_insert = $this->Penerimaan_model->cek_insert_stok_kode($ruang->id_ruang_tujuan, $kode_barang)->row();
+
+        $isi_stok_asal = $this->Penerimaan_model->cek_insert_stok($to_model_asal)->row();
+        $isi_stok_tujuan = $this->Penerimaan_model->cek_insert_stok($to_model_tujuan)->row();
+
         $data = array(
-            'status' => 2
+            'status' => 2,
+            'tgl_diterima' => date('Y-m-d')
         );
 
         $this->db->update('tb_pengiriman_detail', $data, [
@@ -87,27 +106,39 @@ class Penerimaan extends CI_Controller
             'kode_barang'      => $kode_barang
         ]);
 
-        $cek = $this->Penerimaan_model->cek_insert_stok($ruang->id_ruang_tujuan)->row();
-        $cek_insert = $this->Penerimaan_model->cek_insert_stok_kode($ruang->id_ruang_tujuan, $kode_barang)->row();
-
-        $isi_stok = $this->Penerimaan_model->cek_insert_stok($ruang->id_ruang_tujuan)->row();
         $insert_stok = array(
             'kode_barang' => $kode_barang,
             'stok' => $stok,
+            'harga' => $harga,
             'id_ruang' => $ruang->id_ruang_tujuan
 
         );
-        $update_stok = array(
-            'stok' => $isi_stok->stok + $stok
+        $update_stok_asal = array(
+            'stok' => $isi_stok_asal->stok - $stok
         );
-
-        if ($cek_insert == null) {
+        $update_stok_tujuan = array(
+            'stok' => $isi_stok_tujuan->stok + $stok
+        );
+        // var_dump($isi_stok_asal);
+        // die;
+        if ($cek == null) {
             echo "insert";
             $this->Penerimaan_model->insert_stok($insert_stok);
+            $this->db->update('tb_stok', $update_stok_asal, [
+                'id_ruang'   => $ruang->id_ruang,
+                'kode_barang'      => $kode_barang,
+                'harga'      => $harga
+            ]);
         } elseif ($cek != null) {
-            $this->db->update('tb_stok', $update_stok, [
+            $this->db->update('tb_stok', $update_stok_asal, [
+                'id_ruang'   => $ruang->id_ruang,
+                'kode_barang'      => $kode_barang,
+                'harga'      => $harga
+            ]);
+            $this->db->update('tb_stok', $update_stok_tujuan, [
                 'id_ruang'   => $ruang->id_ruang_tujuan,
-                'kode_barang'      => $kode_barang
+                'kode_barang'      => $kode_barang,
+                'harga'      => $harga
             ]);
         }
         redirect(site_url('Penerimaan/detail/' . $id_pengiriman));

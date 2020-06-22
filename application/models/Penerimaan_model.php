@@ -111,11 +111,16 @@ class Penerimaan_model extends CI_Model
     {
         $this->db->insert($this->table_stok, $data);
     }
-    function cek_insert_stok($id_ruang)
+    function cek_insert_stok($data)
     {
+        $id_ruang = $data['ruang'];
+        $harga = $data['harga'];
+        $kode_barang = $data['kode_barang'];
         $this->db->select('*');
         $this->db->from('tb_stok');
         $this->db->where('id_ruang', $id_ruang);
+        $this->db->where('harga', $harga);
+        $this->db->where('kode_barang', $kode_barang);
         $query = $this->db->get();
         // var_dump($query);
         // die;
