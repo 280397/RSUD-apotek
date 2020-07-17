@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 12 Jun 2020 pada 04.44
+-- Waktu pembuatan: 22 Jun 2020 pada 07.42
 -- Versi server: 10.4.11-MariaDB
 -- Versi PHP: 7.4.4
 
@@ -57,7 +57,7 @@ CREATE TABLE `tb_obat` (
   `kode_siva` varchar(128) NOT NULL,
   `nama_obat` varchar(200) NOT NULL,
   `generik` enum('Ya','Tidak') NOT NULL,
-  `satuan` int(11) NOT NULL,
+  `satuan` varchar(30) NOT NULL,
   `harga` int(11) NOT NULL,
   `insert_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -67,9 +67,8 @@ CREATE TABLE `tb_obat` (
 --
 
 INSERT INTO `tb_obat` (`id`, `kode`, `kode_siva`, `nama_obat`, `generik`, `satuan`, `harga`, `insert_at`) VALUES
-(1, 'SPK212', 'SPKK1111', 'APD', 'Tidak', 3, 200000, '2020-06-02 03:10:37'),
-(2, 'A2222', 'A2222111', 'ALKOHOL', 'Tidak', 3, 20000, '2020-06-02 03:11:54'),
-(3, 'SS333', 'SKSJA', 'Panadol', 'Ya', 1, 300000, '2020-06-08 04:50:34');
+(1, '313123213', '23213', 'coba', 'Ya', 'VIAL', 10000, '2020-06-16 02:16:43'),
+(3, 'dvsf3443', 'sdgdgsdfg', 'coba1111', 'Ya', 'Ampul', 111, '2020-06-16 02:16:32');
 
 -- --------------------------------------------------------
 
@@ -89,11 +88,9 @@ CREATE TABLE `tb_obat_transaksi` (
 --
 
 INSERT INTO `tb_obat_transaksi` (`id`, `id_distributor`, `no_faktur`, `tanggal`) VALUES
-(1, 3, 'APD72549874', '2020-06-03'),
-(2, 1, 'APD72549874', '2020-06-03'),
-(3, 1, 'APD72549874', '2020-06-03'),
-(4, 3, 'APD72549874', '2020-06-05'),
-(5, 3, 'APD72549874', '2020-06-05');
+(14, 1, 'APD72549874', '2020-06-20'),
+(15, 1, 'APD72549874', '2020-06-20'),
+(16, 3, 'APD72549874', '2020-06-20');
 
 -- --------------------------------------------------------
 
@@ -116,12 +113,12 @@ CREATE TABLE `tb_obat_transaksi_detail` (
 --
 
 INSERT INTO `tb_obat_transaksi_detail` (`id`, `id_obat_transaksi`, `nama_barang`, `kode_barang`, `exp`, `jumlah`, `harga`) VALUES
-(1, 1, 'Panadol', 'SS333', '2020-06-11', 12, 22),
-(2, 2, 'APD', 'SPK212', '2020-06-11', 12, 20000),
-(3, 3, 'APD', 'SPK212', '2020-06-18', 200, 20000),
-(4, 4, 'Panadol', 'SS333', '2020-06-20', 200, 10000),
-(5, 5, 'ALKOHOL', 'A2222', '2020-06-19', 200, 20000),
-(6, 5, 'APD', 'SPK212', '2020-06-05', 12, 11);
+(15, 14, 'coba', '313123213', '2020-06-27', 200, 20000),
+(16, 14, 'coba1111', 'dvsf3443', '2020-06-27', 300, 10000),
+(17, 15, 'coba1111', 'dvsf3443', '2020-06-27', 100, 30000),
+(18, 15, 'coba', '313123213', '2020-06-27', 100, 30000),
+(19, 16, 'coba1111', 'dvsf3443', '2020-06-27', 50, 10000),
+(20, 16, 'coba', '313123213', '2020-06-27', 50, 10000);
 
 -- --------------------------------------------------------
 
@@ -142,9 +139,8 @@ CREATE TABLE `tb_pengiriman` (
 --
 
 INSERT INTO `tb_pengiriman` (`id`, `no_spb`, `id_ruang`, `id_ruang_tujuan`, `date`) VALUES
-(33, 'SPB12381299', 1, 3, '2020-06-08'),
-(34, 'SPB12381297', 1, 3, '2020-06-08'),
-(36, 'ISO21913', 3, 1, '2020-06-08');
+(2, 'SPB12381297', 1, 2, '2020-06-20'),
+(4, 'SPB12381210', 1, 2, '2020-06-20');
 
 -- --------------------------------------------------------
 
@@ -157,18 +153,19 @@ CREATE TABLE `tb_pengiriman_detail` (
   `id_pengiriman` int(11) NOT NULL,
   `kode_barang` varchar(50) NOT NULL,
   `jumlah` int(11) NOT NULL,
-  `status` int(11) NOT NULL
+  `harga` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `tgl_diterima` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data untuk tabel `tb_pengiriman_detail`
 --
 
-INSERT INTO `tb_pengiriman_detail` (`id`, `id_pengiriman`, `kode_barang`, `jumlah`, `status`) VALUES
-(10, 33, 'SPK212', 10, 2),
-(11, 34, 'SPK212', 5, 2),
-(12, 34, 'SS333', 50, 2),
-(14, 36, 'SPK212', 10, 2);
+INSERT INTO `tb_pengiriman_detail` (`id`, `id_pengiriman`, `kode_barang`, `jumlah`, `harga`, `status`, `tgl_diterima`) VALUES
+(3, 2, '313123213', 100, 20000, 2, ''),
+(4, 2, '313123213', 20, 10000, 2, ''),
+(5, 4, 'dvsf3443', 20, 10000, 2, '2020-06-20');
 
 -- --------------------------------------------------------
 
@@ -231,6 +228,7 @@ INSERT INTO `tb_satuan` (`id`, `satuan`) VALUES
 CREATE TABLE `tb_stok` (
   `id` int(11) NOT NULL,
   `kode_barang` varchar(50) NOT NULL,
+  `harga` int(11) NOT NULL,
   `stok` int(11) NOT NULL,
   `id_ruang` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -239,12 +237,15 @@ CREATE TABLE `tb_stok` (
 -- Dumping data untuk tabel `tb_stok`
 --
 
-INSERT INTO `tb_stok` (`id`, `kode_barang`, `stok`, `id_ruang`) VALUES
-(11, 'SPK212', 25, 1),
-(12, 'SS333', 150, 1),
-(13, 'A2222', 200, 1),
-(14, 'SPK212', 15, 3),
-(15, 'SS333', 50, 3);
+INSERT INTO `tb_stok` (`id`, `kode_barang`, `harga`, `stok`, `id_ruang`) VALUES
+(18, '313123213', 20000, 0, 1),
+(19, 'dvsf3443', 10000, 330, 1),
+(20, 'dvsf3443', 30000, 100, 1),
+(21, '313123213', 30000, 100, 1),
+(22, '313123213', 10000, 10, 1),
+(24, '313123213', 20000, 200, 2),
+(26, '313123213', 10000, 40, 2),
+(27, 'dvsf3443', 10000, 20, 2);
 
 -- --------------------------------------------------------
 
@@ -356,19 +357,19 @@ ALTER TABLE `tb_obat`
 -- AUTO_INCREMENT untuk tabel `tb_obat_transaksi`
 --
 ALTER TABLE `tb_obat_transaksi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_obat_transaksi_detail`
 --
 ALTER TABLE `tb_obat_transaksi_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_pengiriman`
 --
 ALTER TABLE `tb_pengiriman`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_pengiriman_detail`
@@ -392,7 +393,7 @@ ALTER TABLE `tb_satuan`
 -- AUTO_INCREMENT untuk tabel `tb_stok`
 --
 ALTER TABLE `tb_stok`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`

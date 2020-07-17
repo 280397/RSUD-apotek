@@ -73,11 +73,13 @@ class Penerimaan extends CI_Controller
     }
     public function terima()
     {
+        $id = $this->input->post('id', TRUE);
         $id_pengiriman = $this->input->post('id_pengiriman', TRUE);
         $kode_barang = $this->input->post('kode_barang', TRUE);
         $stok = $this->input->post('stok', TRUE);
         $harga = $this->input->post('harga', TRUE);
         $ruang = $this->Pengiriman_model->get($id_pengiriman)->row();
+
 
         $to_model_asal = array(
             'ruang' => $ruang->id_ruang,
@@ -102,8 +104,7 @@ class Penerimaan extends CI_Controller
         );
 
         $this->db->update('tb_pengiriman_detail', $data, [
-            'id_pengiriman'   => $id_pengiriman,
-            'kode_barang'      => $kode_barang
+            'id'   => $id
         ]);
 
         $insert_stok = array(
@@ -167,5 +168,36 @@ class Penerimaan extends CI_Controller
 
         $this->form_validation->set_rules('id', 'id', 'trim');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
+    }
+
+    public function print($id)
+    {
+        $row = $this->Pengiriman_model->get_by_id($id);
+        $query1 = $this->db->query("SELECT tb_pengiriman.*,r1.nama_ruang as asal, r2.nama_ruang as tujuan
+        FROM `tb_pengiriman`
+        JOIN tb_ruang as r1 ON r1.id = tb_pengiriman.id_ruang
+        join tb_ruang as r2 on r2.id = tb_pengiriman.id_ruang_tujuan")->row();
+        // var_dump($row);
+        // die;
+        $detail = $this->Pengiriman_model->get_by_id_detail($row->id)->result();
+        // var_dump($detail);
+        // die;
+        if ($row) {
+            $data = array(
+                'title' => "Pengiriman",
+                'no_spb' => $row->no_spb,
+                'ruang' => $query1,
+                'ruang_tujuan' => $query1,
+                'date' => $row->date,
+                'status' => $row->status,
+                'pengiriman' => $detail,
+                'obat' => $this->Obat_model->get_all()
+            );
+            $html = $this->load->view('pengiriman/print', $data, true);
+            $this->fungsi->PdfGenerator($html, $data['no_spb'], 'A4', 'landscape');
+        } else {
+            $this->session->set_flashdata('message', 'Record Not Found');
+            redirect(site_url('Pengiriman'));
+        }
     }
 }

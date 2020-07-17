@@ -76,6 +76,7 @@ $this->load->view('dist/_partials/header');
                                                     <?php
                                                     if ($key->status == 1) { ?>
                                                         <form action="<?= site_url('Penerimaan/terima') ?>" method="post">
+                                                            <input type="hidden" name="id" value="<?= $key->id ?>" />
                                                             <input type="hidden" name="id_pengiriman" value="<?= $key->id_pengiriman ?>" />
                                                             <input type="hidden" name="kode_barang" value="<?= $key->kode_barang ?>" />
                                                             <input type="hidden" name="stok" value="<?= $key->jumlah ?>" />
